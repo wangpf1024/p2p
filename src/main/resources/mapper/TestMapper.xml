@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sr.p2p.dao.TestMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sr.p2p.model.TestData" >
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <select id="getData" resultMap="BaseResultMap">
+        select count(1), NAME,ID from TEST group by name,id
+    </select>
+
+</mapper>
