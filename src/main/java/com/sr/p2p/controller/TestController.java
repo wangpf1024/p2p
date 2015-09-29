@@ -1,6 +1,5 @@
 package com.sr.p2p.controller;
 
-import com.sr.p2p.annotation.SystemControllerLog;
 import com.sr.p2p.model.TestData;
 import com.sr.p2p.service.TestService;
 import org.slf4j.Logger;
@@ -22,7 +21,6 @@ public class TestController {
     TestService testService;
 
     @RequestMapping(value ="test.do", method = RequestMethod.GET)
-    @SystemControllerLog(description = "查询用户")
     public TestData index(){
         return testService.getData();
     };
