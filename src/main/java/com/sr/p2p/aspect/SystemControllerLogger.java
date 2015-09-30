@@ -59,12 +59,12 @@ public class SystemControllerLogger {
             }
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String ip = request.getRemoteAddr();
-            logger.info("请求时间:" + start.getTime());
-            logger.info("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
-            logger.info("请求参数:" + params);
-            logger.info("请求IP:" + ip);
-            logger.info("请求结束时间:" + end.getTime());
-            logger.info("请求耗时:" +(end.getTime()-start.getTime())+" ms");
+            logger.info("startTime:" + start.getTime());
+            logger.info("method:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
+            logger.info("params:" + params);
+            logger.info("iP:" + ip);
+            logger.info("endTime:" + end.getTime());
+            logger.info("costTime:" +(end.getTime()-start.getTime())+" ms");
         }
         return result;
     };

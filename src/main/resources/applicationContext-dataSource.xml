@@ -11,9 +11,6 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-
-	<context:component-scan base-package="com.sr.p2p.service" />
-
 	<!-- 配置数据源   -->
 	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
 		<property name="properties">

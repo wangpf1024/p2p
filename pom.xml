@@ -84,7 +84,7 @@
           <artifactId>maven-war-plugin</artifactId>
           <version>2.2</version>
           <configuration>
-            <warName>jxp2p</warName>
+            <warName>p2p</warName>
           </configuration>
         </plugin>
 

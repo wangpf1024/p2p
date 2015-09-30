@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+		 xmlns:b="http://www.springframework.org/schema/beans"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<debug />
+
+	<http pattern="static/**" security="none"/>
+
+	<http auto-config="true">
+		<intercept-url pattern="/admin**" access="ROLE_USER" />
+	</http>
+
+        <authentication-manager>
+            <authentication-provider user-service-ref='userDetailsService'/>
+        </authentication-manager>
+
+
+        <!-- This bean is load the user specific data when form login is used. -->
+
+
+
+	<b:bean id="userDetailsService" class="com.sr.p2p.security.P2PUserDetailsService" autowire="constructor"/>
+
+
+
+</b:beans>
