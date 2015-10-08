@@ -42,10 +42,10 @@
 	</authentication-manager>
 
 	<b:bean id="p2pDetailsService" class="com.sr.p2p.security.P2PUserDetailsService">
-		<b:property name="testService" ref="testService"></b:property>
+		<b:property name="testService" ref="testService2"></b:property>
 	</b:bean>
 
-	<b:bean id="testService" class="com.sr.p2p.service.impl.TestServiceImpl">
+	<b:bean id="testService2" class="com.sr.p2p.service.impl.TestServiceImpl">
 	</b:bean>
 
 	<b:bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
