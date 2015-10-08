@@ -30,8 +30,9 @@ import java.util.Collection;
  * @author Rob Winch
  *
  */
-@Service("p2pUserDetailsService")
 public class P2PUserDetailsService implements UserDetailsService {
+
+
 	/*
 	 * (non-Javadoc)
 	 * 

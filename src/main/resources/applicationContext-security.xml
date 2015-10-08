@@ -2,27 +2,62 @@
 <b:beans xmlns="http://www.springframework.org/schema/security"
 		 xmlns:b="http://www.springframework.org/schema/beans"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<!--
+		  one:Extending UsernamePasswordAuthenticationFilter in Spring Security
+		  参考：
+		  http://mrather.blogspot.jp/2010/02/extending-usernamepasswordauthenticatio.html
+
+		   1. We need to extend UsernamePasswordAuthenticationFilter
+
+		   2. In spring security context, we will be overriding the form login filter FORM_LOGIN_FILTER.
+		   <custom-filter position="FORM_LOGIN_FILTER" ref="p2pUsernamePasswordAuthenticationFilter" />
+
+		   3. Since we are using the custom FORM_LOGIN_FILTER, we need to set the following property on <http auto-config="false"
+
+		   4. Another thing to set at <http is entry-point-ref
+
+		   5. Remember the filter 'p2pUsernamePasswordAuthenticationFilter ' we used in in step 2 and extended in step 1, we have to define it.
+
+		   6. In the definition of 'p2pUsernamePasswordAuthenticationFilter' we are identifying the 'authenticationManager', so when you define your authentication manager provide an 'alias' for it:
+
+
+          two:
+   -->
 
 	<debug />
 
-	<http pattern="static/**" security="none"/>
+	<http pattern="/static/**" security="none"/>
 
-	<http auto-config="true">
-		<intercept-url pattern="/admin**" access="ROLE_USER" />
+	<b:bean id="p2pUsernamePasswordAuthenticationFilter" class="com.sr.p2p.security.P2PUsernamePasswordAuthenticationFilter">
+		<b:property name="authenticationManager" ref="authenticationManager"/>
+		<b:property name="authenticationFailureHandler" ref="failureHandler"/>
+		<b:property name="authenticationSuccessHandler" ref="successHandler"/>
+	</b:bean>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="p2pDetailsService"/>
+	</authentication-manager>
+
+	<b:bean id="p2pDetailsService" class="com.sr.p2p.security.P2PUserDetailsService"/>
+
+	<b:bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<b:property name="defaultTargetUrl" value="/login.html"/>
+	</b:bean>
+
+	<b:bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<b:property name="defaultFailureUrl" value="/login.html"/>
+	</b:bean>
+
+	<http auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
+		<custom-filter position="FORM_LOGIN_FILTER" ref="p2pUsernamePasswordAuthenticationFilter" />
 	</http>
 
-        <authentication-manager>
-            <authentication-provider user-service-ref='userDetailsService'/>
-        </authentication-manager>
-
-
-        <!-- This bean is load the user specific data when form login is used. -->
-
-
-
-	<b:bean id="userDetailsService" class="com.sr.p2p.security.P2PUserDetailsService" autowire="constructor"/>
+	<b:bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<b:property name="loginFormUrl" value="/login.html"/>
+	</b:bean>
 
 
 
