@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sr.p2p.dao;
+package com.sr.p2p.model;
 
 
 import org.springframework.security.crypto.password.PasswordEncoder;

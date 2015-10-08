@@ -1,6 +1,7 @@
 package com.sr.p2p.service.impl;
 
 import com.sr.p2p.dao.TestMapper;
+import com.sr.p2p.model.User;
 import com.sr.p2p.model.TestData;
 import com.sr.p2p.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +19,11 @@ public class TestServiceImpl implements TestService {
     @Override
     public TestData getData() {
         return testMapper.getData();
+    }
+
+
+    @Override
+    public User getUserByUsername(String username) {
+        return testMapper.getUserByUsername(username);
     }
 }

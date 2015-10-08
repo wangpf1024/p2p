@@ -1,6 +1,7 @@
 package com.sr.p2p.dao;
 
 import com.sr.p2p.model.TestData;
+import com.sr.p2p.model.User;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository("testMapper")
 public interface TestMapper {
     TestData getData();
+    User getUserByUsername(String username);
 }

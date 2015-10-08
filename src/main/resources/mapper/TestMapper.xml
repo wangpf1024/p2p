@@ -7,9 +7,21 @@
         <result column="NAME" property="name" jdbcType="VARCHAR" />
     </resultMap>
 
+    <resultMap id="UserResultMap" type="com.sr.p2p.model.User" >
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="FIRSTNAME" property="firstName" jdbcType="VARCHAR" />
+        <result column="LASTNAME" property="lastName" jdbcType="VARCHAR" />
+        <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    </resultMap>
+
 
     <select id="getData" resultMap="BaseResultMap">
         select count(1), NAME,ID from TEST group by name,id
+    </select>
+
+    <select id="getUserByUsername" resultMap="UserResultMap" parameterType="java.lang.String">
+        select FIRSTNAME,LASTNAME,EMAIL,PASSWORD from TEST_USER  where EMAIL = #{username}
     </select>
 
 </mapper>

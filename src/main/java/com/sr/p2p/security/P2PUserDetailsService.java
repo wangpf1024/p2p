@@ -15,7 +15,9 @@
  */
 package com.sr.p2p.security;
 
-import com.sr.p2p.dao.User;
+import com.sr.p2p.model.User;
+import com.sr.p2p.service.TestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +34,7 @@ import java.util.Collection;
  */
 public class P2PUserDetailsService implements UserDetailsService {
 
+	TestService testService;
 
 	/*
 	 * (non-Javadoc)
@@ -42,7 +45,7 @@ public class P2PUserDetailsService implements UserDetailsService {
 	 */
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		User user = null;
+		User user = testService.getUserByUsername(username);
 		if (user == null) {
 			throw new UsernameNotFoundException("Could not find user " + username);
 		}
@@ -81,5 +84,13 @@ public class P2PUserDetailsService implements UserDetailsService {
 			return true;
 		}
 
+	}
+
+	public TestService getTestService() {
+		return testService;
+	}
+
+	public void setTestService(TestService testService) {
+		this.testService = testService;
 	}
 }
