@@ -25,4 +25,10 @@ public class TestController {
         return testService.getData();
     };
 
+    @RequestMapping(value ="checksession.do", method = RequestMethod.GET)
+    public String checksession(){
+        return "";
+    };
+
+
 }

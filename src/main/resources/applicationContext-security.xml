@@ -24,7 +24,9 @@
 		   6. In the definition of 'p2pUsernamePasswordAuthenticationFilter' we are identifying the 'authenticationManager', so when you define your authentication manager provide an 'alias' for it:
 
 
-          two:
+          two: session 配置
+
+
    -->
 
 	<debug />
@@ -35,6 +37,7 @@
 		<b:property name="authenticationManager" ref="authenticationManager"/>
 		<b:property name="authenticationFailureHandler" ref="failureHandler"/>
 		<b:property name="authenticationSuccessHandler" ref="successHandler"/>
+		<b:property name="sessionAuthenticationStrategy" ref="sas" />
 	</b:bean>
 
 	<authentication-manager alias="authenticationManager">
@@ -45,8 +48,7 @@
 		<b:property name="testService" ref="testService2"></b:property>
 	</b:bean>
 
-	<b:bean id="testService2" class="com.sr.p2p.service.impl.TestServiceImpl">
-	</b:bean>
+	<b:bean id="testService2" class="com.sr.p2p.service.impl.TestServiceImpl"/>
 
 	<b:bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
 		<b:property name="defaultTargetUrl" value="/"/>
@@ -56,14 +58,41 @@
 		<b:property name="defaultFailureUrl" value="/login.html"/>
 	</b:bean>
 
-	<http auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
-		<custom-filter position="FORM_LOGIN_FILTER" ref="p2pUsernamePasswordAuthenticationFilter" />
-	</http>
-
 	<b:bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
 		<b:property name="loginFormUrl" value="/login.html"/>
 	</b:bean>
 
+	<b:bean id="concurrencyFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<b:property name="sessionRegistry" ref="sessionRegistry" />
+		<b:property name="expiredUrl" value="/session-expired.html" />
+	</b:bean>
 
+	<b:bean id="sas" class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
+		<b:constructor-arg>
+			<b:list>
+				<b:bean class="org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy">
+					<b:constructor-arg ref="sessionRegistry"/>
+					<b:property name="maximumSessions" value="1" />
+					<b:property name="exceptionIfMaximumExceeded" value="true" />
+				</b:bean>
+				<b:bean class="org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy">
+				</b:bean>
+				<b:bean class="org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy">
+					<b:constructor-arg ref="sessionRegistry"/>
+				</b:bean>
+			</b:list>
+		</b:constructor-arg>
+	</b:bean>
+
+	<b:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+
+
+
+	<http auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
+		<custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />
+		<custom-filter position="FORM_LOGIN_FILTER" ref="p2pUsernamePasswordAuthenticationFilter" />
+		<logout logout-success-url="/loggedout.html" logout-url="/loginout" delete-cookies="JSESSIONID"/>
+		<session-management session-authentication-strategy-ref="sas"/>
+	</http>
 
 </b:beans>
