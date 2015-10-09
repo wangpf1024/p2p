@@ -92,7 +92,7 @@
 		<custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />
 		<custom-filter position="FORM_LOGIN_FILTER" ref="p2pUsernamePasswordAuthenticationFilter" />
 		<logout logout-success-url="/loggedout.html" logout-url="/loginout" delete-cookies="JSESSIONID"/>
-		<session-management session-authentication-strategy-ref="sas"/>
+		<session-management session-authentication-strategy-ref="sas" invalid-session-url="/session-expired.html"/>
 	</http>
 
 </b:beans>
