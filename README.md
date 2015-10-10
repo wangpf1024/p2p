@@ -15,6 +15,7 @@ p2p 互联网金融项目 Demo
     日志框架 log4j   
    
    2.前后台使用 http 协议通讯  数据格式为 json      
+
    
    3. Spring Security   
      数据库文件 ： records.sql（默认记录）， seq.sql（序列）， tables.sql（表），triger.sql（触发器）  
