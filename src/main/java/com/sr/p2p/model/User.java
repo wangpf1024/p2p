@@ -42,6 +42,12 @@ public class User implements Serializable {
 	private String lastName;
 	private String email;
 	private String password;
+    private String userName;
+
+    private int isAccountNonExpired;
+	private int isAccountNonLocked;
+    private int isCredentialsNonExpired;
+    private int isEnabled;
 
 	Set<UserRole> roles;
 
@@ -128,5 +134,45 @@ public class User implements Serializable {
 
 	public void setRoles(Set<UserRole> roles) {
 		this.roles = roles;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public int getIsAccountNonExpired() {
+		return isAccountNonExpired;
+	}
+
+	public void setIsAccountNonExpired(int isAccountNonExpired) {
+		this.isAccountNonExpired = isAccountNonExpired;
+	}
+
+	public int getIsAccountNonLocked() {
+		return isAccountNonLocked;
+	}
+
+	public void setIsAccountNonLocked(int isAccountNonLocked) {
+		this.isAccountNonLocked = isAccountNonLocked;
+	}
+
+	public int getIsCredentialsNonExpired() {
+		return isCredentialsNonExpired;
+	}
+
+	public void setIsCredentialsNonExpired(int isCredentialsNonExpired) {
+		this.isCredentialsNonExpired = isCredentialsNonExpired;
+	}
+
+	public int getIsEnabled() {
+		return isEnabled;
+	}
+
+	public void setIsEnabled(int isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 }

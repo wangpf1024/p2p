@@ -20,11 +20,12 @@ public class P2PAccessDecisionManager implements AccessDecisionManager {
         if(collection == null) {
             return;
         }
-
+        //用户请求url需要对应的角色
         Iterator<ConfigAttribute> iterator = collection.iterator();
         while(iterator.hasNext()) {
             ConfigAttribute configAttribute = iterator.next();
             String needPermission = configAttribute.getAttribute();
+            //用户角色与访问连接角色对比
             for(GrantedAuthority ga : authentication.getAuthorities()) {
                 if(needPermission.equals(ga.getAuthority())) {
                     return;

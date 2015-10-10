@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sr.p2p.dao.TestMapper" >
-
-    <resultMap id="BaseResultMap" type="com.sr.p2p.model.TestData" >
-        <id column="ID" property="id" jdbcType="DECIMAL" />
-        <result column="NAME" property="name" jdbcType="VARCHAR" />
-    </resultMap>
+<mapper namespace="com.sr.p2p.dao.RoleResourcesMapper" >
 
     <resultMap id="UserResultMap" type="com.sr.p2p.model.User" >
         <id column="ID" property="id" jdbcType="DECIMAL" />
@@ -13,6 +8,11 @@
         <result column="LASTNAME" property="lastName" jdbcType="VARCHAR" />
         <result column="EMAIL" property="email" jdbcType="VARCHAR" />
         <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+        <result column="username" property="userName" jdbcType="VARCHAR" />
+        <result column="isaccountnonexpired" property="isAccountNonLocked" jdbcType="DECIMAL" />
+        <result column="isaccountnonlocked" property="isCredentialsNonExpired" jdbcType="DECIMAL" />
+        <result column="iscredentialsnonexpired" property="isEnabled" jdbcType="DECIMAL" />
+        <result column="isenabled" property="isEnabled" jdbcType="DECIMAL" />
     </resultMap>
 
     <resultMap id="ResourceMap" type="com.sr.p2p.model.Resource" >
@@ -40,28 +40,24 @@
         <id column="ROLE_ID" property="roleId" jdbcType="DECIMAL" />
     </resultMap>
 
-    <select id="getData" resultMap="BaseResultMap">
-        select count(1), NAME,ID from TEST group by name,id
-    </select>
-
     <select id="getUserByUsername" resultMap="UserResultMap" parameterType="java.lang.String">
-        select ID,FIRSTNAME,LASTNAME,EMAIL,PASSWORD from TEST_USER  where EMAIL = #{username}
+        select t.ID,t.FIRSTNAME,t.LASTNAME,t.EMAIL,t.PASSWORD, t.username,t.isaccountnonexpired,t.isaccountnonlocked,t.iscredentialsnonexpired,t.isenabled from USERS  t where t.username = #{username}
     </select>
 
     <select id="finAllResources" resultMap="ResourceMap">
-      select t.id,t.name,t.descript,t.url,t.type from TEST_RESOURCE t
+      select t.id,t.name,t.descript,t.url,t.type from RESOURCES t
     </select>
 
     <select id="findAllRole" resultMap="RoleMap">
-      select t.id,t.name,t.descript,t.type from TEST_ROLE t
+      select t.id,t.name,t.descript,t.type from ROLES t
     </select>
 
     <select id="findRoleResources" resultMap="RoleResourcesMap">
-       select t.role_id,t.resource_id from TEST_ROLE_RESOURCE t
+       select t.role_id,t.resource_id from ROLES_RESOURCES t
     </select>
 
     <select id="findUserRoles" resultMap="UserRolesMap" parameterType="java.lang.Long">
-        select t.user_id,t.role_id from TEST_USER_ROLE t where t.user_id =  #{userid}
+        select t.user_id,t.role_id from USERS_ROLES t where t.user_id =  #{userid}
     </select>
 
 </mapper>

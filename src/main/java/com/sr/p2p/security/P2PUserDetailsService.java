@@ -16,18 +16,14 @@
 package com.sr.p2p.security;
 
 import com.sr.p2p.model.Resource;
-import com.sr.p2p.model.Role;
 import com.sr.p2p.model.User;
 import com.sr.p2p.model.UserRole;
-import com.sr.p2p.service.TestService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sr.p2p.service.RoleResourcesService;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 
 import java.util.Collection;
@@ -40,7 +36,7 @@ import java.util.Set;
  */
 public class P2PUserDetailsService implements UserDetailsService {
 
-	TestService testService;
+	RoleResourcesService roleResourcesService;
 
 	/*
 	 * (non-Javadoc)
@@ -51,12 +47,13 @@ public class P2PUserDetailsService implements UserDetailsService {
 	 */
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		User user = testService.getUserByUsername(username);
+		User user = roleResourcesService.getUserByUsername(username);
 		if (user == null) {
 			throw new UsernameNotFoundException("Could not find user " + username);
 		}
-		Set<UserRole> roles = testService.findUserRoles(user.getId());
+		Set<UserRole> roles = roleResourcesService.findUserRoles(user.getId());
 		user.setRoles(roles);
+		//用户权限
 		Collection<GrantedAuthority> grantedAuths = obtionGrantedAuthorities(user);
 		return new CustomUserDetails(user,grantedAuths);
 	}
@@ -77,31 +74,34 @@ public class P2PUserDetailsService implements UserDetailsService {
 		}
 
 		public String getUsername() {
-			return getEmail();
+			return getUserName();
 		}
 
 		public boolean isAccountNonExpired() {
-			return true;
+			return getIsAccountNonExpired() > 0 ? false : true;
 		}
 
 		public boolean isAccountNonLocked() {
-			return true;
+			return getIsAccountNonLocked() > 0 ? false : true;
 		}
 
 		public boolean isCredentialsNonExpired() {
-			return true;
+			return getIsCredentialsNonExpired() > 0 ? false : true;
 		}
 
 		public boolean isEnabled() {
-			return true;
+			return getIsEnabled() > 0 ? false : true;
 		}
 	}
 
+	//加载用户权限
 	private Set<GrantedAuthority> obtionGrantedAuthorities(User user) {
 		Set<GrantedAuthority> authSet = new HashSet<GrantedAuthority>();
 		Set<UserRole> roles = user.getRoles();
 		for(UserRole role : roles) {
-			Set<Resource> tempRes = P2PFilterInvocationSecurityMetadataSource.roleResouceTemp.get(role.getRoleId());
+			//用户角色对应的资源
+			Set<Resource> tempRes = P2PFilterInvocationSecurityMetadataSource.roleResouces.get(role.getRoleId());
+			//认证用户角色
 			for(Resource res : tempRes) {
 				authSet.add(new GrantedAuthorityImpl(res.getName()));
 			}
@@ -109,11 +109,12 @@ public class P2PUserDetailsService implements UserDetailsService {
 		return authSet;
 	}
 
-	public TestService getTestService() {
-		return testService;
+	public RoleResourcesService getRoleResourcesService() {
+		return roleResourcesService;
 	}
 
-	public void setTestService(TestService testService) {
-		this.testService = testService;
+	public void setRoleResourcesService(RoleResourcesService roleResourcesService) {
+		this.roleResourcesService = roleResourcesService;
 	}
+
 }

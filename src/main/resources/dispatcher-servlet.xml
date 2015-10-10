@@ -24,5 +24,10 @@
 
 	<mvc:resources location="static/" mapping="/static/**" />
 
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/static/view/" />
+		<property name="suffix" value=".html" />
+	</bean>
+
 </beans>
      

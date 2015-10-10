@@ -12,7 +12,7 @@
 	<debug />
 
 	<!-- 自定义service 服务-->
-	<b:bean id="testService2" class="com.sr.p2p.service.impl.TestServiceImpl"/>
+	<b:bean id="roleResourcesService" class="com.sr.p2p.service.impl.RoleResourcesServiceImpl"/>
 
 	<!-- pattern :  url 表达式，默认拦截全部-->
 	<http pattern="/static/**" security="none"/>
@@ -30,7 +30,7 @@
 		<!---->
 		<logout logout-success-url="/loggedout.html" logout-url="/loginout" delete-cookies="JSESSIONID"/>
 		<!---->
-		<session-management session-authentication-strategy-ref="sas" invalid-session-url="/session-expired.html"/>
+		<session-management session-authentication-strategy-ref="sas" invalid-session-url="/login.html"/>
 	</http>
 
 	<!-- 登录页面 -->
@@ -58,12 +58,12 @@
 
 	<!--注册元数据资源-->
 	<b:bean id="p2pFilterInvocationSecurityMetadataSource" class="com.sr.p2p.security.P2PFilterInvocationSecurityMetadataSource">
-		<b:constructor-arg ref="testService2"/>
+		<b:constructor-arg ref="roleResourcesService"/>
 	</b:bean>
 
 	<!--注册用户信息服务-->
 	<b:bean id="p2pDetailsService" class="com.sr.p2p.security.P2PUserDetailsService">
-		<b:property name="testService" ref="testService2"></b:property>
+		<b:property name="roleResourcesService" ref="roleResourcesService"></b:property>
 	</b:bean>
 
 	<!--注册session认证-->

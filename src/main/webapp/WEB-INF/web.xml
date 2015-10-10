@@ -15,6 +15,7 @@
     </context-param>
 
 
+    <!-- log4j 日志系统-->
     <context-param>
         <param-name>log4jConfigLocation</param-name>
         <param-value>classpath:log4j.properties</param-value>
@@ -84,7 +85,7 @@
     </filter-mapping>
 
     <session-config>
-        <session-timeout>1</session-timeout>
+        <session-timeout>60</session-timeout>
     </session-config>
 
 

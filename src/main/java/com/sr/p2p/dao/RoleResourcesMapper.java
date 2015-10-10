@@ -9,9 +9,8 @@ import java.util.Set;
 /**
  * Created by wangpengfei on 2015/9/28.
  */
-@Repository("testMapper")
-public interface TestMapper {
-    TestData getData();
+@Repository("roleResourcesMapper")
+public interface RoleResourcesMapper {
     User getUserByUsername(String username);
     List<Resource> finAllResources();
     List<Role> findAllRole();

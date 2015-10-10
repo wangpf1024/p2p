@@ -8,9 +8,7 @@ import java.util.Set;
 /**
  * Created by wangpengfei on 2015/9/28.
  */
-public interface TestService {
-
-    TestData getData();
+public interface RoleResourcesService {
 
     User getUserByUsername(String username);
 
@@ -21,4 +19,5 @@ public interface TestService {
     List<RoleResource> findRoleResources();
 
     Set<UserRole> findUserRoles(long userid);
+
 }

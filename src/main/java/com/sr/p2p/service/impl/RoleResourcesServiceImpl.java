@@ -1,8 +1,8 @@
 package com.sr.p2p.service.impl;
 
-import com.sr.p2p.dao.TestMapper;
+import com.sr.p2p.dao.RoleResourcesMapper;
 import com.sr.p2p.model.*;
-import com.sr.p2p.service.TestService;
+import com.sr.p2p.service.RoleResourcesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,40 +12,34 @@ import java.util.Set;
 /**
  * Created by wangpengfei on 2015/9/28.
  */
-@Service("testService")
-public class TestServiceImpl implements TestService {
+@Service()
+public class RoleResourcesServiceImpl implements RoleResourcesService {
 
     @Autowired
-    private TestMapper testMapper;
-
-    @Override
-    public TestData getData() {
-        return testMapper.getData();
-    }
-
+    private RoleResourcesMapper roleResourcesMapper;
 
     @Override
     public User getUserByUsername(String username) {
-        return testMapper.getUserByUsername(username);
+        return roleResourcesMapper.getUserByUsername(username);
     }
 
     @Override
     public List<Resource> findAll() {
-        return testMapper.finAllResources();
+        return roleResourcesMapper.finAllResources();
     }
 
     @Override
     public List<Role> findAllRole() {
-        return testMapper.findAllRole();
+        return roleResourcesMapper.findAllRole();
     }
 
     @Override
     public List<RoleResource> findRoleResources() {
-        return testMapper.findRoleResources();
+        return roleResourcesMapper.findRoleResources();
     }
 
     @Override
     public Set<UserRole> findUserRoles(long userid) {
-        return testMapper.findUserRoles(userid);
+        return roleResourcesMapper.findUserRoles(userid);
     }
 }

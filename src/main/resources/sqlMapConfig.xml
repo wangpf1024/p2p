@@ -10,7 +10,7 @@
 	
 	<!-- 对应Bean类的xml配置文件的路径信息 -->
 	<mappers>
-		<mapper resource="mapper/TestMapper.xml" />
+		<mapper resource="mapper/RoleResourcesMapper.xml" />
 	</mappers>
 
 </configuration>
