@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Represents a user in our system.
@@ -41,6 +42,8 @@ public class User implements Serializable {
 	private String lastName;
 	private String email;
 	private String password;
+
+	Set<UserRole> roles;
 
 	public User() {
 	}
@@ -119,4 +122,11 @@ public class User implements Serializable {
 		return true;
 	}
 
+	public Set<UserRole> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<UserRole> roles) {
+		this.roles = roles;
+	}
 }

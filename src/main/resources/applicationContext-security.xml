@@ -6,67 +6,98 @@
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
 	<!--
-		  one:Extending UsernamePasswordAuthenticationFilter in Spring Security
-		  参考：
-		  http://mrather.blogspot.jp/2010/02/extending-usernamepasswordauthenticatio.html
-
-		   1. We need to extend UsernamePasswordAuthenticationFilter
-
-		   2. In spring security context, we will be overriding the form login filter FORM_LOGIN_FILTER.
-		   <custom-filter position="FORM_LOGIN_FILTER" ref="p2pUsernamePasswordAuthenticationFilter" />
-
-		   3. Since we are using the custom FORM_LOGIN_FILTER, we need to set the following property on <http auto-config="false"
-
-		   4. Another thing to set at <http is entry-point-ref
-
-		   5. Remember the filter 'p2pUsernamePasswordAuthenticationFilter ' we used in in step 2 and extended in step 1, we have to define it.
-
-		   6. In the definition of 'p2pUsernamePasswordAuthenticationFilter' we are identifying the 'authenticationManager', so when you define your authentication manager provide an 'alias' for it:
-
-
-          two: session 配置
-
-
+		  one:Extending UsernamePasswordAuthenticationFilter in Spring Security 参考： http://mrather.blogspot.jp/2010/02/extending-usernamepasswordauthenticatio.html
    -->
 
 	<debug />
 
-	<http pattern="/static/**" security="none"/>
-
-	<b:bean id="p2pUsernamePasswordAuthenticationFilter" class="com.sr.p2p.security.P2PUsernamePasswordAuthenticationFilter">
-		<b:property name="authenticationManager" ref="authenticationManager"/>
-		<b:property name="authenticationFailureHandler" ref="failureHandler"/>
-		<b:property name="authenticationSuccessHandler" ref="successHandler"/>
-		<b:property name="sessionAuthenticationStrategy" ref="sas" />
-	</b:bean>
-
-	<authentication-manager alias="authenticationManager">
-		<authentication-provider user-service-ref="p2pDetailsService"/>
-	</authentication-manager>
-
-	<b:bean id="p2pDetailsService" class="com.sr.p2p.security.P2PUserDetailsService">
-		<b:property name="testService" ref="testService2"></b:property>
-	</b:bean>
-
+	<!-- 自定义service 服务-->
 	<b:bean id="testService2" class="com.sr.p2p.service.impl.TestServiceImpl"/>
 
-	<b:bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-		<b:property name="defaultTargetUrl" value="/"/>
-	</b:bean>
+	<!-- pattern :  url 表达式，默认拦截全部-->
+	<http pattern="/static/**" security="none"/>
 
-	<b:bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-		<b:property name="defaultFailureUrl" value="/login.html"/>
-	</b:bean>
+	<!-- auto-config :是否自动生成登录页面
+	     entry-point-ref ：认证切入点
+	-->
+	<http auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
+		<!--核心安全拦截器-->
+		<custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="p2pBeforeSecurityInterceptor" />
+		<!--Session 认证-->
+		<custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />
+		<!--登录认证-->
+		<custom-filter position="FORM_LOGIN_FILTER" ref="p2pUsernamePasswordAuthenticationFilter" />
+		<!---->
+		<logout logout-success-url="/loggedout.html" logout-url="/loginout" delete-cookies="JSESSIONID"/>
+		<!---->
+		<session-management session-authentication-strategy-ref="sas" invalid-session-url="/session-expired.html"/>
+	</http>
 
+	<!-- 登录页面 -->
 	<b:bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
 		<b:property name="loginFormUrl" value="/login.html"/>
 	</b:bean>
 
-	<b:bean id="concurrencyFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">
-		<b:property name="sessionRegistry" ref="sessionRegistry" />
-		<b:property name="expiredUrl" value="/session-expired.html" />
+	<!-- 用户请求 url 权限验证, -->
+	<b:bean id="p2pBeforeSecurityInterceptor" class="com.sr.p2p.security.P2PBeforeSecurityInterceptor">
+		<!--认证管理-->
+		<b:property name="authenticationManager" ref="authenticationManager"/>
+		<!--访问决策管理-->
+		<b:property name="accessDecisionManager" ref="p2pAccessDecisionManager" />
+		<!--元数据资源-->
+		<b:property name="securityMetadataSource" ref="p2pFilterInvocationSecurityMetadataSource" />
 	</b:bean>
 
+	<!-- 注册认证管理 -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="p2pDetailsService"/>
+	</authentication-manager>
+
+	<!--注册访问决策管理-->
+	<b:bean id="p2pAccessDecisionManager" class="com.sr.p2p.security.P2PAccessDecisionManager"/>
+
+	<!--注册元数据资源-->
+	<b:bean id="p2pFilterInvocationSecurityMetadataSource" class="com.sr.p2p.security.P2PFilterInvocationSecurityMetadataSource">
+		<b:constructor-arg ref="testService2"/>
+	</b:bean>
+
+	<!--注册用户信息服务-->
+	<b:bean id="p2pDetailsService" class="com.sr.p2p.security.P2PUserDetailsService">
+		<b:property name="testService" ref="testService2"></b:property>
+	</b:bean>
+
+	<!--注册session认证-->
+	<b:bean id="concurrencyFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<b:property name="sessionRegistry" ref="sessionRegistry" />
+		<b:property name="expiredUrl" value="/login.html" />
+	</b:bean>
+
+	<!--session 注册-->
+	<b:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+
+    <!--注册登录认证-->
+	<b:bean id="p2pUsernamePasswordAuthenticationFilter" class="com.sr.p2p.security.P2PUsernamePasswordAuthenticationFilter">
+		<!--认证管理-->
+		<b:property name="authenticationManager" ref="authenticationManager"/>
+		<!--认证失败配置-->
+		<b:property name="authenticationFailureHandler" ref="failureHandler"/>
+		<!--认证成功配置-->
+		<b:property name="authenticationSuccessHandler" ref="successHandler"/>
+		<!-- session 策略-->
+		<b:property name="sessionAuthenticationStrategy" ref="sas" />
+	</b:bean>
+
+	<!--认证成功-->
+	<b:bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<b:property name="defaultTargetUrl" value="/"/>
+	</b:bean>
+
+	<!--认证失败-->
+	<b:bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<b:property name="defaultFailureUrl" value="/login.html"/>
+	</b:bean>
+
+	<!--session 管理-->
 	<b:bean id="sas" class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
 		<b:constructor-arg>
 			<b:list>
@@ -84,15 +115,5 @@
 		</b:constructor-arg>
 	</b:bean>
 
-	<b:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
-
-
-
-	<http auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
-		<custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />
-		<custom-filter position="FORM_LOGIN_FILTER" ref="p2pUsernamePasswordAuthenticationFilter" />
-		<logout logout-success-url="/loggedout.html" logout-url="/loginout" delete-cookies="JSESSIONID"/>
-		<session-management session-authentication-strategy-ref="sas" invalid-session-url="/session-expired.html"/>
-	</http>
 
 </b:beans>

@@ -15,13 +15,53 @@
         <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
     </resultMap>
 
+    <resultMap id="ResourceMap" type="com.sr.p2p.model.Resource" >
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="DESCRIPT" property="descript" jdbcType="VARCHAR" />
+        <result column="URL" property="url" jdbcType="VARCHAR" />
+        <result column="TYPE" property="type" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <resultMap id="RoleMap" type="com.sr.p2p.model.Role" >
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="DESCRIPT" property="descript" jdbcType="VARCHAR" />
+        <result column="TYPE" property="type" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <resultMap id="RoleResourcesMap" type="com.sr.p2p.model.RoleResource" >
+        <id column="ROLE_ID" property="roleId" jdbcType="DECIMAL" />
+        <id column="RESOURCE_ID" property="resourceId" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <resultMap id="UserRolesMap" type="com.sr.p2p.model.UserRole" >
+        <id column="USER_ID" property="userId" jdbcType="DECIMAL" />
+        <id column="ROLE_ID" property="roleId" jdbcType="DECIMAL" />
+    </resultMap>
 
     <select id="getData" resultMap="BaseResultMap">
         select count(1), NAME,ID from TEST group by name,id
     </select>
 
     <select id="getUserByUsername" resultMap="UserResultMap" parameterType="java.lang.String">
-        select FIRSTNAME,LASTNAME,EMAIL,PASSWORD from TEST_USER  where EMAIL = #{username}
+        select ID,FIRSTNAME,LASTNAME,EMAIL,PASSWORD from TEST_USER  where EMAIL = #{username}
+    </select>
+
+    <select id="finAllResources" resultMap="ResourceMap">
+      select t.id,t.name,t.descript,t.url,t.type from TEST_RESOURCE t
+    </select>
+
+    <select id="findAllRole" resultMap="RoleMap">
+      select t.id,t.name,t.descript,t.type from TEST_ROLE t
+    </select>
+
+    <select id="findRoleResources" resultMap="RoleResourcesMap">
+       select t.role_id,t.resource_id from TEST_ROLE_RESOURCE t
+    </select>
+
+    <select id="findUserRoles" resultMap="UserRolesMap" parameterType="java.lang.Long">
+        select t.user_id,t.role_id from TEST_USER_ROLE t where t.user_id =  #{userid}
     </select>
 
 </mapper>

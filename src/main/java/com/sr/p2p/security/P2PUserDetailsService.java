@@ -15,11 +15,15 @@
  */
 package com.sr.p2p.security;
 
+import com.sr.p2p.model.Resource;
+import com.sr.p2p.model.Role;
 import com.sr.p2p.model.User;
+import com.sr.p2p.model.UserRole;
 import com.sr.p2p.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +31,8 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Rob Winch
@@ -49,19 +55,25 @@ public class P2PUserDetailsService implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException("Could not find user " + username);
 		}
-		return new CustomUserDetails(user);
+		Set<UserRole> roles = testService.findUserRoles(user.getId());
+		user.setRoles(roles);
+		Collection<GrantedAuthority> grantedAuths = obtionGrantedAuthorities(user);
+		return new CustomUserDetails(user,grantedAuths);
 	}
 
 	private final static class CustomUserDetails extends User implements UserDetails {
 
 		private static final long serialVersionUID = -1003195756083273443L;
 
-		private CustomUserDetails(User user) {
+		Collection<GrantedAuthority> grantedAuths = null;
+
+		private CustomUserDetails(User user,Collection<GrantedAuthority> grantedAuths) {
 			super(user);
+			this.grantedAuths = grantedAuths;
 		}
 
 		public Collection<? extends GrantedAuthority> getAuthorities() {
-			return AuthorityUtils.createAuthorityList("ROLE_USER");
+			return grantedAuths;
 		}
 
 		public String getUsername() {
@@ -83,7 +95,18 @@ public class P2PUserDetailsService implements UserDetailsService {
 		public boolean isEnabled() {
 			return true;
 		}
+	}
 
+	private Set<GrantedAuthority> obtionGrantedAuthorities(User user) {
+		Set<GrantedAuthority> authSet = new HashSet<GrantedAuthority>();
+		Set<UserRole> roles = user.getRoles();
+		for(UserRole role : roles) {
+			Set<Resource> tempRes = P2PFilterInvocationSecurityMetadataSource.roleResouceTemp.get(role.getRoleId());
+			for(Resource res : tempRes) {
+				authSet.add(new GrantedAuthorityImpl(res.getName()));
+			}
+		}
+		return authSet;
 	}
 
 	public TestService getTestService() {
