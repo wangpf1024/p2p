@@ -16,7 +16,7 @@ p2p 互联网金融项目 Demo
    
    2.前后台使用 http 协议通讯  数据格式为 json      
 
-   
+
    3. Spring Security   
      数据库文件 ： records.sql（默认记录）， seq.sql（序列）， tables.sql（表），triger.sql（触发器）  
      数据表 ：RESOURCES（资源表），ROLES（角色表），ROLES_RESOURCES（角色资源表），USERS（用户表），USERS_ROLES（用户角色表）
