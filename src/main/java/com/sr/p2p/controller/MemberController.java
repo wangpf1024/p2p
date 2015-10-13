@@ -5,20 +5,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by wangpengfei on 2015/9/28.
  */
-@Controller
-public class IndexController {
+@Controller()
+@RequestMapping("member")
+public class MemberController {
 
-    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
-
-    @RequestMapping(value ="test.do", method = RequestMethod.GET)
+    @RequestMapping(value ="index", method = RequestMethod.GET)
     public String index(){
-        return "index";
+        return "member/index";
     };
 
 }
