@@ -53,7 +53,7 @@
 
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
-        <url-pattern>*.htm</url-pattern>
+        <url-pattern>*.do</url-pattern>
     </servlet-mapping>
 
 

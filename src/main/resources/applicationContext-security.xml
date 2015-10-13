@@ -30,7 +30,7 @@
 		<!---->
 		<logout logout-success-url="/loginOut.html" logout-url="/loginout" delete-cookies="JSESSIONID"/>
 		<!---->
-		<session-management session-authentication-strategy-ref="sas" invalid-session-url="/"/>
+		<session-management session-authentication-strategy-ref="sas"/>
 	</http>
 
 	<!-- 登录页面 -->
@@ -72,7 +72,7 @@
 		<b:property name="expiredUrl" value="/login.html" />
 	</b:bean>
 
-	<!--session 注册-->
+	<!--SessionController 注册-->
 	<b:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
 
     <!--注册登录认证-->
@@ -83,7 +83,7 @@
 		<b:property name="authenticationFailureHandler" ref="failureHandler"/>
 		<!--认证成功配置-->
 		<b:property name="authenticationSuccessHandler" ref="successHandler"/>
-		<!-- session 策略-->
+		<!-- SessionController 策略-->
 		<b:property name="sessionAuthenticationStrategy" ref="sas" />
 	</b:bean>
 
@@ -97,7 +97,7 @@
 		<b:property name="defaultFailureUrl" value="/login.html"/>
 	</b:bean>
 
-	<!--session 管理-->
+	<!--SessionController 管理-->
 	<b:bean id="sas" class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
 		<b:constructor-arg>
 			<b:list>

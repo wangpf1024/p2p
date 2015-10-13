@@ -29,9 +29,9 @@ delete from RESOURCES;
 commit;
 prompt Loading RESOURCES...
 insert into RESOURCES (id, name, descript, url, type)
-values (2, 'admin', '管理员', '/admin/index.htm', 0);
+values (2, 'admin', '管理员', '/admin/index.do', 0);
 insert into RESOURCES (id, name, descript, url, type)
-values (3, 'member', '普通用户', '/member/index.htm', 0);
+values (3, 'member', '普通用户', '/member/index.do', 0);
 commit;
 prompt 2 records loaded
 prompt Loading ROLES...

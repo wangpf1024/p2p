@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * Created by wangpengfei on 2015/9/28.
  */
-@Controller()
+@Controller
 @RequestMapping("member")
 public class MemberController {
 
