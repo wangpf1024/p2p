@@ -30,7 +30,7 @@
 		<!---->
 		<logout logout-success-url="/loggedout.html" logout-url="/loginout" delete-cookies="JSESSIONID"/>
 		<!---->
-		<session-management session-authentication-strategy-ref="sas" invalid-session-url="/login.html"/>
+		<session-management session-authentication-strategy-ref="sas" invalid-session-url="/"/>
 	</http>
 
 	<!-- 登录页面 -->
