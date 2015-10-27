@@ -68,7 +68,7 @@
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="annotationClass" value="org.springframework.stereotype.Repository" />
 		<property name="basePackage" value="com.sr.p2p.dao" />
-		<property name="SqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 
 
