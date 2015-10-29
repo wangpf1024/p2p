@@ -28,7 +28,7 @@
 		<!--登录认证-->
 		<custom-filter position="FORM_LOGIN_FILTER" ref="p2pUsernamePasswordAuthenticationFilter" />
 		<!---->
-		<logout logout-success-url="/loginOut.html" logout-url="/loginout" delete-cookies="JSESSIONID"/>
+		<logout logout-success-url="/" logout-url="/loginout" delete-cookies="JSESSIONID"/>
 		<!---->
 		<session-management session-authentication-strategy-ref="sas"/>
 	</http>

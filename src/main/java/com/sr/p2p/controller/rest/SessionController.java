@@ -32,6 +32,7 @@ public class SessionController {
         }
         User user = (User)authentication.getPrincipal();
         respone.setData(user);
+        respone.setResult(true);
         return  respone;
     };
 

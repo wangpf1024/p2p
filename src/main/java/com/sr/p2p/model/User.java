@@ -60,6 +60,7 @@ public class User implements Serializable {
 		this.lastName = user.lastName;
 		this.email = user.email;
 		this.password = user.password;
+		this.userName= user.userName;
 	}
 
 	public String getPassword() {
